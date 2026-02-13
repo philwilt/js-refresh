@@ -3,14 +3,23 @@
  * Exercise stub for object merge behavior.
  */
 
-export const merge = (a: Object, b: Object): Object => {
-  const result = { ...a };
+type PlainObject = Record<string, unknown>;
+
+const isPlainObject = (value: unknown): value is PlainObject => {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+};
+
+export const merge = (a: PlainObject, b: PlainObject): PlainObject => {
+  const result: PlainObject = { ...a };
 
   for (const key in b) {
-    if (b[key] instanceof Object && key in a && a[key] instanceof Object) {
-      result[key] = merge(a[key], b[key]);
+    const leftValue = a[key];
+    const rightValue = b[key];
+
+    if (isPlainObject(leftValue) && isPlainObject(rightValue)) {
+      result[key] = merge(leftValue, rightValue);
     } else {
-      result[key] = b[key];
+      result[key] = rightValue;
     }
   }
 
