@@ -1,0 +1,16 @@
+{
+  "name": "js-refresh",
+  "version": "1.0.0",
+  "private": true,
+  "description": "JS refresh exercise repo for interview prep",
+  "type": "module",
+  "scripts": {
+    "test": "vitest",
+    "test:watch": "vitest --watch"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  }
+}
