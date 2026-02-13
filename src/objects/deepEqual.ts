@@ -3,23 +3,46 @@
  * Exercise stub for deep object equality checks.
  */
 
-export const deepEqual = <T>(a: T, b: T): boolean => {
-  if (a == b) return true;
+type PlainObject = Record<string, unknown>;
 
-  if (typeof a != "object" || typeof b != "object" || a == null || b == null) {
-    return false;
+const isPlainObject = (value: unknown): value is PlainObject => {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+};
+
+const areArraysEqual = (a: unknown[], b: unknown[]): boolean => {
+  if (a.length !== b.length) return false;
+
+  for (let i = 0; i < a.length; i += 1) {
+    if (!deepEqual(a[i], b[i])) return false;
   }
 
-  const keysA = Object.keys(a);
-  const keysB = Object.keys(b);
+  return true;
+};
 
-  if (keysA.length != keysB.length) return false;
+const areObjectsEqual = (a: PlainObject, b: PlainObject): boolean => {
+  const keysA = Object.keys(a);
+
+  if (keysA.length !== Object.keys(b).length) return false;
 
   for (const key of keysA) {
-    if (!keysB.includes(key)) return false;
-
+    if (!Object.prototype.hasOwnProperty.call(b, key)) return false;
     if (!deepEqual(a[key], b[key])) return false;
   }
 
   return true;
+};
+
+export const deepEqual = (a: unknown, b: unknown): boolean => {
+  if (a === b) return true;
+
+  if (Array.isArray(a) || Array.isArray(b)) {
+    if (!Array.isArray(a) || !Array.isArray(b)) return false;
+    return areArraysEqual(a, b);
+  }
+
+  if (!isPlainObject(a) || !isPlainObject(b)) {
+    return false;
+  }
+
+  return areObjectsEqual(a, b);
 };
