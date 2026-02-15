@@ -5,17 +5,17 @@
 export const debounce = <Args extends unknown[]>(
   fn: (...args: Args) => unknown,
   delay: number,
-): ((...vals: Args) => void) => {
+): ((...args: Args) => void) => {
   let delaying = false;
   let handle: ReturnType<typeof setTimeout>;
 
-  return (...vals: Args): void => {
+  return (...args: Args): void => {
     if (delaying) {
       clearTimeout(handle);
     }
 
     handle = setTimeout(() => {
-      fn(...vals);
+      fn(...args);
     }, delay);
 
     delaying = true;

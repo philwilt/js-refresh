@@ -4,24 +4,24 @@
  */
 
 export const promiseAll = async <T>(
-  values: (T | Promise<T>)[],
+  promises: (T | Promise<T>)[],
 ): Promise<T[]> => {
   return new Promise((resolve, reject) => {
     const results: T[] = [];
     let completed = 0;
 
-    if (values.length === 0) {
+    if (promises.length === 0) {
       resolve([]);
       return;
     }
 
-    values.forEach((value, index) => {
-      Promise.resolve(value)
-        .then((resolved) => {
-          results[index] = resolved;
+    promises.forEach((promise, index) => {
+      Promise.resolve(promise)
+        .then((value) => {
+          results[index] = value;
           completed++;
 
-          if (completed === values.length) {
+          if (completed === promises.length) {
             resolve(results);
           }
         })
